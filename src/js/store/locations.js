@@ -8,6 +8,7 @@ class Locations {
         this.cities = null;
         this.airlines = null;
         this.shortCitiesList = null;
+        this.favorites = [];
         this.formatDate = helpers.formatDate;
     }
 
@@ -45,7 +46,7 @@ class Locations {
     }
 
     serializeCountries(countries) {
-        // { 'Country code': {...} }
+        // { 'Country code': {...} } - функция преобразует полученный массив стран в нужный формат
         return countries.reduce((acc, country) => {
             acc[country.code] = country;
             return acc;
@@ -80,6 +81,25 @@ class Locations {
         return this.countries[code].name;
     }
 
+    addTicketToFavorite(id) {
+        if (this.favorites.length && this.favorites.find((item) => item.id === id)) return;
+        const ticket = this.lastSearch.find((item) => item.id === id);
+        this.favorites.push(ticket);
+    };
+
+    removeTicketFromFavorite(id) {
+        if (!this.favorites.length) return;
+
+        let index = null;
+        const ticket = this.favorites.find((item, ind) => {
+            if (item.id === id) {
+                index = ind;
+                return item;
+            }
+        });
+        this.favorites.splice(index, 1);
+    }
+
     getAirlineNameByCode(code) {
         return this.airlines[code] ? this.airlines[code].name : '';
     }
@@ -94,9 +114,10 @@ class Locations {
     }
 
     serializeTickets(tickets) {
-        return Object.values(tickets).map(ticket => {
+        return Object.entries(tickets).map(([key, ticket]) => {
             return {
                 ...ticket,
+                id: key,
                 origin_name: this.getCityNameByCode(ticket.origin),
                 destination_name: this.getCityNameByCode(ticket.destination),
                 airline_logo: this.getAirlineLogoByCode(ticket.airline),
@@ -112,6 +133,6 @@ const locations = new Locations(api, { formatDate });
 
 export default locations;
 
-// { 'City, Country': null }
-// [{}, {}]
-// { 'City': {...} } => cities[code]
+// { 'City, Country': null } в таком виде принимает значения плагин Materialize Autocomplite
+// [{}, {}] в таком виде получаем данные с сервера - массив городов и стран
+// { 'City': {...} } => cities[code] - для удобства нам нужен объект городов

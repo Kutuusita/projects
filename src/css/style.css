@@ -71,6 +71,10 @@
   color: #000;
 }
 
+.favorites .favorite-item {
+  padding: 15px;
+}
+
 .favorites .favorite-item-airline-img {
   max-width: 100px;
   margin-right: 10px;

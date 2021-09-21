@@ -1,4 +1,4 @@
-import{ getAutocompleteInstance, getDatePickerInstance } from '../plugins/materialize';
+import { getAutocompleteInstance, getDatePickerInstance } from '../plugins/materialize';
 
 class FormUI {
     constructor(autocompleteInstance, datePickerInstance) {

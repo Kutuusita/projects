@@ -8,12 +8,15 @@ import currencyUI from './views/currency';
 document.addEventListener('DOMContentLoaded', () => {
     const form = formUI.form;
     
+    
     // Events
     initApp();
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         onFormSubmit();
-    })
+    });
+
+    
 
     // Handlers
     async function initApp() {
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const depart_date = formUI.departDateValue;
         const return_date = formUI.returnDateValue;
         const currency = currencyUI.currencyValue;
-        // CODE, CODE, 2021-09, 2021-10
+        // CODE, CODE, 2021-09, 2021-10 - формат данных для отправки на сервер
         await locations.fetchTickets({
             origin,
             destination,
@@ -36,7 +39,43 @@ document.addEventListener('DOMContentLoaded', () => {
             return_date,
             currency,
         });
-        console.log(locations.lastSearch);
+
+
         ticketsUI.renderTickets(locations.lastSearch);
+
+        const addTicketButtons = document.querySelectorAll('.add-favorite');
+        
+        Object.values(addTicketButtons).forEach( item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                onAddFavoriteClick(item);
+            });
+        });
+        
+    }
+
+    function onAddFavoriteClick(item) {
+        const id = item.dataset.ticketId;
+        locations.addTicketToFavorite(id);
+        ticketsUI.renderFavoriteTickets(locations.favorites);
+        setEventToDelButtons();
+    }    
+
+    function onDeleteFavoriteClick(item) {
+        const id = item.dataset.ticketId;
+        locations.removeTicketFromFavorite(id);
+        ticketsUI.renderFavoriteTickets(locations.favorites);
+        setEventToDelButtons();
+
+    }
+
+    function setEventToDelButtons() {
+        const removeTicketButtons =  document.querySelectorAll('.delete-favorite');
+        Object.values(removeTicketButtons).forEach( item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                onDeleteFavoriteClick(item);
+            });
+        });
     }
 });

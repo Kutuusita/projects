@@ -12,13 +12,7 @@ export function getSelectInstance(elem) {
 
 // Init autocomplete
 const autocomplete = document.querySelectorAll('.autocomplete');
-M.Autocomplete.init(autocomplete, {
-    data: {
-        "Apple": null,
-        "Microsoft": null,
-        "Google": 'https://placehold.it/250x250'
-    }
-});
+M.Autocomplete.init(autocomplete);
 
 
 export function getAutocompleteInstance(elem) {
@@ -36,3 +30,8 @@ M.Datepicker.init(datepickers, {
 export function getDatePickerInstance(elem) {
     return M.Datepicker.getInstance(elem);
 }
+
+
+// Init Dropdown
+const dropdown = document.querySelectorAll('.dropdown-trigger');
+M.Dropdown.init(dropdown);
